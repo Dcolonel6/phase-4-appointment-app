@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+
+# puts "Seeding the database 🌱"
+
+# puts "Creating users"
+# 10.times do |i|
+#     User.create(
+
+#     )
+# end
+
+
