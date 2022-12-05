@@ -12,6 +12,10 @@ class UsersController < ApplicationController
         render json: new_user, status: :created
     end
 
+    def update 
+        user = find_user
+    end
+
     private
     def user_params
         params.permit(:username, :name, :password, :password_confirmation, :role)
@@ -19,5 +23,9 @@ class UsersController < ApplicationController
 
     def render_user_unprocessable_entity(error_object)
         render json: {errors: error_object.record.errors.full_messages}, status: :unprocessable_entity
+    end
+
+    def find_user
+        User.find(params[:id])
     end
 end
