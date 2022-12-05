@@ -2,8 +2,14 @@ class UsersController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_user_unprocessable_entity
     wrap_parameters format: []
 
+    def index 
+        users = User.all 
+        render json: users, status: :ok
+    end
+
     def create 
         new_user = User.create!(user_params)
+        render json: new_user, status: :created
     end
 
     private
