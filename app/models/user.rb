@@ -6,4 +6,6 @@ class User < ApplicationRecord
         in: ROLES,
         message: "Must be one of #{ROLES.join(', ')}"
     }
+
+    has_secure_password
 end
