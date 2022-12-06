@@ -1,12 +1,13 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import * as reactIconsFa from "react-icons/fa";
 import * as reactIconsRi from "react-icons/ri";
 import * as reactJss from "react-jss";
+import  { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom';
+import './auth.css';
+
 const { ThemeProvider, withStyles } = reactJss;
-const { BrowserRouter, Switch, Route, useHistory } = ReactRouterDOM;
 const { FaChessBishop, FaPlusCircle, FaArrowLeft } = reactIconsFa;
 const { RiMoonClearLine, RiSunLine } = reactIconsRi;
-import './auth.css';
 
 const mainTheme = {
    sizes: {
