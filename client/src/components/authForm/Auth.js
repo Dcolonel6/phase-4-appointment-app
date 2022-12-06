@@ -3,7 +3,7 @@ import * as reactIconsFa from "react-icons/fa";
 import * as reactIconsRi from "react-icons/ri";
 import * as reactJss from "react-jss";
 import  { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom';
-import './auth.css';
+import './Auth.css';
 
 const { ThemeProvider, withStyles } = reactJss;
 const { FaChessBishop, FaPlusCircle, FaArrowLeft } = reactIconsFa;
@@ -357,7 +357,7 @@ const alertStyles = theme => ({
 });
 
 /*============================ STYLES END ==============================*/
-const CustomThemeContext = createContext();
+const CustomThemeContext = React.createContext();
 
 const CustomThemeProvider = props => {
    const [currentTheme, setCurrentTheme] = useState('light');
@@ -512,7 +512,7 @@ function RegistrationPage(props) {
 
       <div style={{ display: 'flex', alignItems: 'center', fontWeight: 100, marginBottom: '25px' }}>
          <FaChessBishop style={{ marginRight: '10px', fontSize: '1.3em', color: '#83afe0' }} />
-         <span>Amazing service</span>
+         <span>Appointment App</span>
       </div>
 
       <h1 className={classes.cardHeader}>Sign Up</h1>
@@ -606,7 +606,7 @@ function LoginPage(props) {
 
       <div style={{ display: 'flex', alignItems: 'center', fontWeight: 100, marginBottom: '25px' }}>
          <FaChessBishop style={{ marginRight: '10px', fontSize: '1.3em', color: '#83afe0' }} />
-         <span>Amazing service</span>
+         <span>Appointment App</span>
       </div>
 
       <h1 className={classes.cardHeader}>Log in</h1>
@@ -651,7 +651,7 @@ function LoginPage(props) {
 LoginPage = withStyles(loginPageStyles)(LoginPage);
 
 
-function App() {
+function Auth() {
    return <CustomThemeProvider>
       <BrowserRouter>
 
@@ -675,9 +675,4 @@ function App() {
    </CustomThemeProvider>
 }
 
-ReactDOM.render(
-   <React.StrictMode>
-      <App />
-   </React.StrictMode>,
-   document.getElementById('root')
-);
+export default Auth;
