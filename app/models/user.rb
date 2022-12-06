@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     ROLES = ['Doctor', 'Patient']
+
     validates :username, presence: true, uniqueness: true
     validates :name, presence: true
     validates :role, inclusion: {
@@ -8,4 +9,5 @@ class User < ApplicationRecord
     }
 
     has_secure_password
+    has_many :appointments
 end
