@@ -17,9 +17,7 @@ class Appointment < ApplicationRecord
   def check_if_doctor_available
     
     doc_avail = DoctorAvailability.find_by(user_id:id_doctor)
-    doc_details = User.find_by(id: id_doctor)
-
-    byebug
+    doc_details = User.find_by(id: id_doctor)    
 
     unless doc_avail
       errors.add(:id_doctor, "The doctor doesnt exist or hasnt set his/her available times")
@@ -27,7 +25,7 @@ class Appointment < ApplicationRecord
       #check if he is available
       start_date = doc_avail[:start_day]
       end_date = doc_avail[:end_day]    
-      
+
       unless(start_date..end_date).cover?(appointment_date)
         errors.add(:appointment_date,"#{doc_details[:name]} is only available from #{start_date} to #{end_date}")
       end
