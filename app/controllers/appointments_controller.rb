@@ -37,11 +37,11 @@ class AppointmentsController < ApplicationController
     end
 
     def appointment_params_create
-        params.permit(:appointment_date, :user_id, :comments)
+        params.permit(:appointment_date, :user_id, :comments, :id_doctor, :status)
     end
 
     def appointment_params_update
-        params.permit(:appointment_date, :comments)
+        params.permit(:appointment_date, :comments, :status, :id_doctor)
     end
 
     def render_appointment_unprocessable_entity(error_object)
