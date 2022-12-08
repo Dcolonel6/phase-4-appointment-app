@@ -9,6 +9,7 @@ import {
 } from './NavbarElements';
 
 const Navbar = () => {
+  
   return (
     <>
       <Nav>

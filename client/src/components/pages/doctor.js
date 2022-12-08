@@ -1,30 +1,33 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import Doctor  from '/doctors'
+import React from "react";
 
-const Doctor = () => {
-  const[doctorsData, setDoctorsData ] = useState([]) 
-  useEffect(()=>{ fetch ('http://localhost:3000/doctors') 
-  .then(resp => resp.json())
-   .then(data => setDoctorsData(data)) 
-  }, []) 
-  const doctorsList = doctorData.map(r => {
-     return( <Doctor doctor = {r} /> ) }) 
-    
+const Doctor = ({doctors, setSelectd}) => { 
+
   //fetch all doctors
+  const allDocOption = doctors.map(({id, username, name}) => <option key= {id} value={id}>{name}</option>)
+
+
+  const onChangeHandler = (evnt) => {
+    const { target } = evnt
+    setSelectd(target.value)
+  }
 
   //display all of them kwa table
   return (
     <div
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '90vh'
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <h1>Doctors List</h1>
-      {doctorsList}
+      <div>
+        <label htmlFor="pet-select">Choose a doctor:</label>
+
+        <select name="doctors" id="doc-select" onChange ={onChangeHandler}>
+          <option value="0">--Please choose an option--</option>
+          {allDocOption}
+        </select>
+      </div>
     </div>
   );
 };
