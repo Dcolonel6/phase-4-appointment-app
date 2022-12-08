@@ -3,6 +3,7 @@ import * as reactIconsFa from "react-icons/fa";
 import * as reactIconsRi from "react-icons/ri";
 import * as reactJss from "react-jss";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Auth.css";
 
 const { ThemeProvider, withStyles } = reactJss;
@@ -632,6 +633,8 @@ function LoginPage(props) {
 	const navigate = useNavigate();
 
 	const [email, setEmail] = useState("");
+   const [name, setName] = useState("");
+   const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [formErrors, setFormErrors] = useState([]);
 	const [isSuccessed, setSuccess] = useState(false);
@@ -662,6 +665,15 @@ function LoginPage(props) {
 
 		let passwordCheck = passwordValidate(password);
 		if (passwordCheck) errors.push(passwordCheck);
+
+      axios.post(`localhost:3000/auth/signin?password=${password}&username=${username}`, {
+        email,
+        password,
+      }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.log(err);
+      })
 
 		setFormErrors(errors);
 		if (!errors.length) setSuccess(true);
@@ -738,16 +750,6 @@ function LoginPage(props) {
 	);
 }
 LoginPage = withStyles(loginPageStyles)(LoginPage);
-
-function Auth() {
-	return (
-		<CustomThemeProvider>
-			<BrowserRouter>
-				<Routes></Routes>
-			</BrowserRouter>
-		</CustomThemeProvider>
-	);
-}
 
 export const Login = () => {
 	return (

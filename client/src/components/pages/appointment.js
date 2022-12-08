@@ -1,17 +1,14 @@
 import React from 'react';
+import DayTimePicker from '@mooncake-dev/react-day-time-picker';
+
+//https://react-day-time-picker.netlify.app/ documentation
+
 
 const Appointments = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '90vh'
-      }}
-    >
-      <h1>Appointments lists</h1>
-    </div>
+   <DayTimePicker
+   timeSlotSizeMinutes={60}
+   />
   );
 };
 
