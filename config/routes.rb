@@ -11,4 +11,7 @@ Rails.application.routes.draw do
   post "/auth/signup", to: "users#create" 
   post "/auth/signin", to: "sessions#create"
   delete "/auth/logout", to: "sessions#destroy"
+
+  #users
+  get "/doctors", to: "users#doctors"
 end

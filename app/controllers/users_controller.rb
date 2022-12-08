@@ -19,6 +19,12 @@ class UsersController < ApplicationController
         user.update!(user_params)
         render json: user, status: :accepted
     end
+    
+    #gets all doctors
+    def doctors
+        doctors = User.where(role: "Doctor")
+        render json: doctors, status: :ok
+    end
 
     private
     def user_params
