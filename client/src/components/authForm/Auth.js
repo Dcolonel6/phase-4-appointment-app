@@ -498,6 +498,8 @@ function RegistrationPage(props) {
 	const [response, setResponse] = useState("");
 
 	const [email, setEmail] = useState("");
+   const [name, setName] = useState("");
+   const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [repeatPassword, setRepeatPassword] = useState("");
 	const [formErrors, setFormErrors] = useState([]);
@@ -527,8 +529,8 @@ function RegistrationPage(props) {
 		console.log("registration sumbmit handler");
 
 		let errors = [];
-		let emailCheck = emailValidate(email);
-		if (emailCheck) errors.push(emailCheck);
+		// let emailCheck = emailValidate(email);
+		// if (emailCheck) errors.push(emailCheck);
 
 		let passwordCheck = passwordValidate(password);
 		if (passwordCheck) errors.push(passwordCheck);
@@ -573,10 +575,19 @@ function RegistrationPage(props) {
 
 						<div>
 							<Label>
-								<span>Email</span>
+								<span>Name</span>
 								<Input
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+								/>
+							</Label>
+						</div>
+						<div>
+							<Label>
+								<span>Username</span>
+								<Input
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
 								/>
 							</Label>
 						</div>
@@ -666,10 +677,7 @@ function LoginPage(props) {
 		let passwordCheck = passwordValidate(password);
 		if (passwordCheck) errors.push(passwordCheck);
 
-      axios.post(`localhost:3000/auth/signin?password=${password}&username=${username}`, {
-        email,
-        password,
-      }).then((res) => {
+      axios.post(`localhost:3000/auth/signin?password=${password}&username=${username}`).then((res) => {
         console.log(res);
       }).catch((err) => {
         console.log(err);
@@ -711,14 +719,16 @@ function LoginPage(props) {
 
 					{isSuccessed ? <Alert type="success">Welcome!</Alert> : ""}
 
-					<div name="email" validate={emailValidate}>
+					<div name="username" 
+               // validate={emailValidate}
+               >
 						<Label>
-							<span>Email</span>
-							<Input value={email} onChange={(e) => setEmail(e.target.value)} />
+							<span>Username</span>
+							<Input value={username} onChange={(e) => setUsername(e.target.value)} />
 						</Label>
 					</div>
 
-					<div name="password" validate={passwordValidate}>
+					<div name="password" >
 						<Label>
 							<span>Password</span>
 							<Input
