@@ -5,6 +5,7 @@ import * as reactJss from "react-jss";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Auth.css";
+import { userContext } from "../../App";
 
 const { ThemeProvider, withStyles } = reactJss;
 const { FaChessBishop, FaPlusCircle, FaArrowLeft } = reactIconsFa;
@@ -384,30 +385,30 @@ const useThemeContext = () => {
 	return useContext(CustomThemeContext);
 };
 
-function ToggleThemeButton(props) {
-	const classes = props.classes;
-	const { currentTheme, toggleTheme } = useThemeContext();
+// function ToggleThemeButton(props) {
+// 	const classes = props.classes;
+// 	const { currentTheme, toggleTheme } = useThemeContext();
 
-	return (
-		<button className={classes.button} onClick={toggleTheme}>
-			{currentTheme === "light" ? (
-				<RiMoonClearLine className={classes.themeIcon} />
-			) : (
-				<RiSunLine className={classes.themeIcon} />
-			)}
-		</button>
-	);
-}
-ToggleThemeButton = withStyles(toggleThemeButtonStyles)(ToggleThemeButton);
+// 	return (
+// 		<button className={classes.button} onClick={toggleTheme}>
+// 			{currentTheme === "light" ? (
+// 				<RiMoonClearLine className={classes.themeIcon} />
+// 			) : (
+// 				<RiSunLine className={classes.themeIcon} />
+// 			)}
+// 		</button>
+// 	);
+// }
+// ToggleThemeButton = withStyles(toggleThemeButtonStyles)(ToggleThemeButton);
 
 function LoginLayout(props) {
 	const classes = props.classes;
 
 	return (
 		<div className={classes.loginLayout}>
-			<div className={classes.rightAngleAction}>
+			{/* <div className={classes.rightAngleAction}>
 				<ToggleThemeButton size={"2.2em"} transparent />
-			</div>
+			</div> */}
 			{props.children}
 		</div>
 	);
@@ -492,27 +493,22 @@ function Input(props) {
 }
 Input = withStyles(inputStyles)(Input);
 
-function   RegistrationPage(props) {
+function RegistrationPage(props) {
 	const classes = props.classes;
 	const navigate = useNavigate();
 	const [response, setResponse] = useState("");
 
-	const [email, setEmail] = useState("");
-   const [name, setName] = useState("");
-   const [username, setUsername] = useState("");
+	const [name, setName] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [repeatPassword, setRepeatPassword] = useState("");
+	const [isDoctor, setIsDoctor] = useState(false);
 	const [formErrors, setFormErrors] = useState([]);
+
+   const {setUser} = useContext(userContext);
 
 	const backToLogin = () => {
 		navigate("/login");
-	};
-
-	const emailValidate = (value) => {
-		const emailRegex =
-			/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-		if (!emailRegex.test(value)) return "Wrong email";
-		return undefined;
 	};
 
 	const passwordValidate = (value) => {
@@ -526,17 +522,35 @@ function   RegistrationPage(props) {
 
 	const registrationSubmitHandler = async (e) => {
 		e.preventDefault();
-		console.log("registration submit handler");
 
 		let errors = [];
-		// let emailCheck = emailValidate(email);
-		// if (emailCheck) errors.push(emailCheck);
 
 		let passwordCheck = passwordValidate(password);
 		if (passwordCheck) errors.push(passwordCheck);
 
 		let repeatCheck = repeatValidate(password, repeatPassword);
 		if (repeatCheck) errors.push(repeatCheck);
+
+		await axios({
+			method: "post",
+			url: "http://localhost:3000/auth/signup",
+			data: {
+				name,
+				username,
+				password,
+            password_confirmation: repeatPassword,
+				role: isDoctor ? "Doctor" : "Patient",
+			},
+		})
+			.then((res) => {
+				console.log(res.data);
+            setUser(res.data);
+            res.data.role === "Doctor" ? navigate("/doctor") : navigate("/appointments");
+			})
+			.catch((err) => {
+				console.log(err);
+				errors.push(...err?.response?.data?.errors);
+			});
 
 		setFormErrors(errors);
 		if (!errors.length) setResponse("Registation done");
@@ -565,8 +579,8 @@ function   RegistrationPage(props) {
 					<form onSubmit={registrationSubmitHandler}>
 						{formErrors.length ? (
 							<Alert title="Registration failed">
-								{formErrors.map((err) => (
-									<div>{err}</div>
+								{formErrors.map((err, index) => (
+									<div key={index}>{err}</div>
 								))}
 							</Alert>
 						) : (
@@ -576,10 +590,7 @@ function   RegistrationPage(props) {
 						<div>
 							<Label>
 								<span>Name</span>
-								<Input
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-								/>
+								<Input value={name} onChange={(e) => setName(e.target.value)} />
 							</Label>
 						</div>
 						<div>
@@ -614,6 +625,17 @@ function   RegistrationPage(props) {
 							</Label>
 						</div>
 
+						<div>
+							<Label>
+								<span>Are you a doctor?</span>
+								<Input
+									type="checkbox"
+									value={isDoctor}
+									onChange={(e) => setIsDoctor(e.target.checked)}
+								/>
+							</Label>
+						</div>
+
 						<div style={{ marginTop: "10px" }}>
 							<Button type="submit" fullWidth>
 								Create account
@@ -642,10 +664,7 @@ RegistrationPage = withStyles(registrationPageStyles)(RegistrationPage);
 function LoginPage(props) {
 	const classes = props.classes;
 	const navigate = useNavigate();
-
-	const [email, setEmail] = useState("");
-   	const [name, setName] = useState("");
-   	const [username, setUsername] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [formErrors, setFormErrors] = useState([]);
 	const [isSuccessed, setSuccess] = useState(false);
@@ -654,47 +673,47 @@ function LoginPage(props) {
 		navigate("/signup");
 	};
 
-	//validates our username
-	const usernameValidate = (value) => {
-		const usernameRegex = /^[a-zA-Z]+$/;
-		if (!usernameRegex.test(value)) return "The username should have only letters";
-		return undefined;
-	};
-
-	//validates name
-	const nameValidate = (value) => {
-		const nameRegex = /^[a-zA-Z]+$/;
-		if (!nameRegex.test(value)) return "The name should have only letters and should be first name and second name";
-		return undefined;
-	};
-
-
-	//validates our passwords
 	const passwordValidate = (value) => {
 		if (!value || value.length < 6)
 			return "Password must be more than 6 characters";
 		return undefined;
 	};
+	const { setUser } = useContext(userContext);
 
 	const loginSubmitHandler = async (e) => {
 		e.preventDefault();
 
 		let errors = [];
-		let usernameCheck = usernameValidate(username);
-		if (usernameCheck) errors.push(usernameCheck);
 
 		let passwordCheck = passwordValidate(password);
 		if (passwordCheck) errors.push(passwordCheck);
 
-      axios.post(`localhost:3000/auth/signin?password=${password}&username=${username}`).then((res) => {
-        console.log(res);
-      }).catch((err) => {
-        console.log(err);
-      })
+		await axios({
+			method: "post",
+			url: `http://localhost:3000/auth/signin?password=${password}&username=${username}`,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+			},
+			data: {
+				username: username,
+				password: password,
+			},
+		})
+			.then((res) => {
+				setUser(res.data);
+				navigate("/appointments");
+			})
+			.catch((err) => {
+				console.log(err);
+				errors.push("Invalid username or password");
+			});
 
 		setFormErrors(errors);
 		if (!errors.length) setSuccess(true);
 	};
+
+	const { user } = useContext(userContext);
 
 	return (
 		<div className={classes.loginCard}>
@@ -718,26 +737,28 @@ function LoginPage(props) {
 				<form onSubmit={loginSubmitHandler}>
 					{formErrors.length ? (
 						<Alert title="Failed to login">
-							{formErrors.map((err) => (
-								<div>{err}</div>
+							{formErrors.map((err, index) => (
+								<div key={index}>{err}</div>
 							))}
 						</Alert>
 					) : (
 						""
 					)}
 
-					{isSuccessed ? <Alert type="success">Welcome!</Alert> : ""}
+					{isSuccessed && user ? <Alert type="success">Welcome!</Alert> : ""}
 
-					<div name="username" 
-               // validate={emailValidate}
-               >
+					<div name="username">
 						<Label>
 							<span>Username</span>
-							<Input value={username} onChange={(e) => setUsername(e.target.value)} />
+							<Input
+								required
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+							/>
 						</Label>
 					</div>
 
-					<div name="password" >
+					<div name="password">
 						<Label>
 							<span>Password</span>
 							<Input
