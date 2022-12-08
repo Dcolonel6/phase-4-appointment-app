@@ -5,9 +5,13 @@ import DayTimePicker from '@mooncake-dev/react-day-time-picker';
 
 
 const Appointments = () => {
+  const handleScheduled = dateTime => {
+    console.log('scheduled: ', dateTime);
+  };
   return (
    <DayTimePicker
    timeSlotSizeMinutes={60}
+   onConfirm ={handleScheduled}
    />
   );
 };

@@ -492,7 +492,7 @@ function Input(props) {
 }
 Input = withStyles(inputStyles)(Input);
 
-function RegistrationPage(props) {
+function   RegistrationPage(props) {
 	const classes = props.classes;
 	const navigate = useNavigate();
 	const [response, setResponse] = useState("");
@@ -526,7 +526,7 @@ function RegistrationPage(props) {
 
 	const registrationSubmitHandler = async (e) => {
 		e.preventDefault();
-		console.log("registration sumbmit handler");
+		console.log("registration submit handler");
 
 		let errors = [];
 		// let emailCheck = emailValidate(email);
@@ -539,7 +539,7 @@ function RegistrationPage(props) {
 		if (repeatCheck) errors.push(repeatCheck);
 
 		setFormErrors(errors);
-		if (!errors.length) setResponse("Registation done, check you email :)");
+		if (!errors.length) setResponse("Registation done");
 	};
 
 	return (
@@ -644,8 +644,8 @@ function LoginPage(props) {
 	const navigate = useNavigate();
 
 	const [email, setEmail] = useState("");
-   const [name, setName] = useState("");
-   const [username, setUsername] = useState("");
+   	const [name, setName] = useState("");
+   	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [formErrors, setFormErrors] = useState([]);
 	const [isSuccessed, setSuccess] = useState(false);
@@ -654,13 +654,22 @@ function LoginPage(props) {
 		navigate("/signup");
 	};
 
-	const emailValidate = (value) => {
-		const emailRegex =
-			/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-		if (!emailRegex.test(value)) return "Wrong email";
+	//validates our username
+	const usernameValidate = (value) => {
+		const usernameRegex = /^[a-zA-Z]+$/;
+		if (!usernameRegex.test(value)) return "The username should have only letters";
 		return undefined;
 	};
 
+	//validates name
+	const nameValidate = (value) => {
+		const nameRegex = /^[a-zA-Z]+$/;
+		if (!nameRegex.test(value)) return "The name should have only letters and should be first name and second name";
+		return undefined;
+	};
+
+
+	//validates our passwords
 	const passwordValidate = (value) => {
 		if (!value || value.length < 6)
 			return "Password must be more than 6 characters";
@@ -671,8 +680,8 @@ function LoginPage(props) {
 		e.preventDefault();
 
 		let errors = [];
-		let emailCheck = emailValidate(email);
-		if (emailCheck) errors.push(emailCheck);
+		let usernameCheck = usernameValidate(username);
+		if (usernameCheck) errors.push(usernameCheck);
 
 		let passwordCheck = passwordValidate(password);
 		if (passwordCheck) errors.push(passwordCheck);
