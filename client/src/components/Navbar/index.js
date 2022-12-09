@@ -41,12 +41,9 @@ const Navbar = () => {
 					<NavLink to="/appointments" >
 						Appointment
 					</NavLink>
-					<NavLink to="/doctors" >
+					{user&&user.role ==='Doctor'&&<NavLink to="/doctors" >
 						Doctors
-					</NavLink>
-					<NavLink to="/signup" >
-						Sign Up
-					</NavLink>
+					</NavLink>}
 				</NavMenu>
 				<NavBtn>
 					{!user && <NavBtnLink to="/login">Log In</NavBtnLink>}
