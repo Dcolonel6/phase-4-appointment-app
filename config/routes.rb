@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # Routing logic: fallback requests for React Router.
   # Leave this here to help deploy your app later!
   #get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
-  resources :users, only: [:index]
+  resources :users, only: [:index, :show]
   resources :appointments
 
   post "/auth/signup", to: "users#create" 
@@ -14,4 +14,7 @@ Rails.application.routes.draw do
 
   #users
   get "/doctors", to: "users#doctors"
+
+  #appointments
+  get "/doctor-appointment/", to: "appointments#appointment_doctors"
 end

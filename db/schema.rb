@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_07_095213) do
+ActiveRecord::Schema.define(version: 2022_12_09_132703) do
 
   create_table "appointments", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "patient_id"
     t.datetime "appointment_date"
     t.text "comments"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "id_doctor"
+    t.integer "doctor_id"
     t.string "status", default: "Pending"
   end
 

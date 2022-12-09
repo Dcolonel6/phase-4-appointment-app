@@ -533,7 +533,7 @@ function RegistrationPage(props) {
 
 		await axios({
 			method: "post",
-			url: "http://localhost:3000/auth/signup",
+			url: "/signup",
 			data: {
 				name,
 				username,

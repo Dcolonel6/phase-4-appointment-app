@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login, Registration } from "./components/authForm/Auth";
 import Appointments from "./components/pages/appointment";
+import AllAppointments from "./components/pages/AllAppointments";
 
 export const userContext = React.createContext({
 	user: null,
@@ -18,7 +19,8 @@ function App() {
 				<Routes>
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<Registration />} />
-					{user && <Route path="/appointments" element={<Appointments />} />}
+					<Route path="/appointments" element={<AllAppointments />} />
+					{user && <Route path="/make-appointments" element={<Appointments />} />}
           {user && <Route path="/doctors" element={<Appointments />} />}
 					<Route exact path="/" element={<Login />} />
 				</Routes>

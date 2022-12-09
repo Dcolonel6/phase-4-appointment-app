@@ -1,7 +1,7 @@
 class AppointmentsController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_appointment_unprocessable_entity
     rescue_from ActiveRecord::RecordNotFound, with: :render_appointment_not_found
-    before_action :authorize
+    #before_action :authorize
     wrap_parameters format: []
 
     def index 
@@ -10,6 +10,7 @@ class AppointmentsController < ApplicationController
     end
     
     def create
+        
         new_appointment = Appointment.create!(appointment_params_create)
         render json: new_appointment, status: :created
     end
@@ -29,6 +30,15 @@ class AppointmentsController < ApplicationController
         appointment = find_appointment
         appointment.destroy
         head :no_content
+    end
+
+    def appointment_doctors
+        #appointments = Appointment.where(id_doctor:params[:doctor_id])
+        #byebug
+        #render json: appointments, status: :ok
+        puts "controller for appointment doctors"
+        byebug
+       # puts params[:doctor_id]
     end
 
     private
