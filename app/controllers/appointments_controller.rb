@@ -22,7 +22,7 @@ class AppointmentsController < ApplicationController
 
     def update
         appointment = find_appointment
-        byebug
+        # byebug
         appointment.update!(appointment_params_update)
         render json: appointment, status: :accepted 
     end

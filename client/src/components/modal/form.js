@@ -3,10 +3,17 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 //import { userContext } from "../../App";
 
-
-const Form = ({ currentUser, selectedAppointment, handleClose }) => {
-  const { patient, doctor, id, appointment_date, status, comments } = selectedAppointment;
-  let name = "Patient Name", nameValue = selectedAppointment.patient.name;
+const Form = ({
+  currentUser,
+  selectedAppointment,
+  handleClose,
+  update,
+  setAlertHandler,
+}) => {
+  const { patient, doctor, id, appointment_date, status, comments } =
+    selectedAppointment;
+  let name = "Patient Name",
+    nameValue = selectedAppointment.patient.name;
   const [formData, setFormData] = useState({
     name:
       currentUser.role === "Patient"
@@ -15,9 +22,8 @@ const Form = ({ currentUser, selectedAppointment, handleClose }) => {
     comment: comments,
     appointment_date: appointment_date,
     status: status,
-    id: selectedAppointment.id
+    id: selectedAppointment.id,
   });
-  
 
   if (currentUser.role === "Patient") {
     name = "Doctor Name";
@@ -25,26 +31,27 @@ const Form = ({ currentUser, selectedAppointment, handleClose }) => {
   }
 
   const onChangeHandler = (evnt) => {
-    const {target} = evnt
+    const { target } = evnt;
     setFormData((currentState) => {
       return {
         ...currentState,
-        [target.name]: target.value
-      }
-    })
-    
-
-  }
+        [target.name]: target.value,
+      };
+    });
+  };
 
   const updateAppointments = (data, id) => {
-    console.log(data)
-    axios.patch(`/appointments/${id}`,data)     
+    
+    axios
+      .patch(`/appointments/${id}`, data)
       .then((res) => {
-        //setAppointments(res.data);
-        console.log(res.data)
+        update(res.data);
+        setAlertHandler(true,"success")
+        //console.log(res.data)
       })
       .catch((err) => {
         console.log(err);
+        setAlertHandler(true,"danger")
         //errors.push("Invalid username or password");
       });
   };
@@ -54,13 +61,12 @@ const Form = ({ currentUser, selectedAppointment, handleClose }) => {
       comments: formData.comment,
       appointment_date: formData.appointment_date,
       status: formData.status,
-      patient_id:selectedAppointment.patient.id,
-      doctor_id:selectedAppointment.doctor.id
-    }
-    handleClose()  
-    updateAppointments(data,formData.id)
-  }
-  
+      patient_id: selectedAppointment.patient.id,
+      doctor_id: selectedAppointment.doctor.id,
+    };
+    handleClose();
+    updateAppointments(data, formData.id);
+  };
 
   return (
     <form>
@@ -119,7 +125,7 @@ const Form = ({ currentUser, selectedAppointment, handleClose }) => {
         ></textarea>
       </div>
       <div className="form-group">
-      <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
         <Button variant="primary" onClick={(evnt) => onClose()}>
