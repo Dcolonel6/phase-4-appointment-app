@@ -183,7 +183,7 @@ const AllAppointments = () => {
         <div className="row justify-content-start">
           <div className="row justify-content-center">
             <div className="col-6">
-              {user.role ? `All Apointments ${user.role}` : "Please login"}   
+              {user.role ? `All Apointments for ${user.role} : ${user.name}` : "Please login"}   
              { errorMessageAlert && <AlertBox variant="danger" message="Something went wrong, Update Failed" setShowHandler={setAlertHandler}/>}
               { successMessageAlert && <AlertBox variant="success" message="Yaay! update succeeded!!" setShowHandler={setAlertHandler}/>}       
               
