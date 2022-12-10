@@ -533,7 +533,7 @@ function RegistrationPage(props) {
 
 		await axios({
 			method: "post",
-			url: "/signup",
+			url: "http://localhost:3000/auth/signup",
 			data: {
 				name,
 				username,
@@ -549,7 +549,7 @@ function RegistrationPage(props) {
 			})
 			.catch((err) => {
 				console.log(err);
-				errors.push(...err?.response?.data?.errors);
+				errors.push(...err?.message);
 			});
 
 		setFormErrors(errors);
