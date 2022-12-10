@@ -41,7 +41,7 @@ const Navbar = () => {
           <NavLink to="/appointments">Appointments</NavLink>
           {/* <NavLink to="/make-appointment">Book Appointment</NavLink> */}
           <NavLink to="/make-appointment">Book Appointment</NavLink>
-          <NavLink to="/signup">Sign Up</NavLink>
+          {/* <NavLink to="/signup">Sign Up</NavLink> */}
         </NavMenu>
         <NavBtn>
           {!user && <NavBtnLink to="/login">Log In</NavBtnLink>}
