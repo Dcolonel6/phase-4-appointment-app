@@ -1,12 +1,13 @@
 class Appointment < ApplicationRecord
-    belongs_to :user
+    belongs_to :patient, class_name: "User" 
+    belongs_to :doctor, class_name: "User"   
 
     validates :appointment_date, presence: true
-    validates :user_id, presence: true
-    validates :id_doctor, presence: true
+    validates :patient_id, presence: true
+    validates :doctor_id, presence: true
     validates :comments, presence: true     
-    validate :appointment_date_cannot_be_in_the_past
-    validate :check_if_doctor_available
+    #validate :appointment_date_cannot_be_in_the_past
+    #validate :check_if_doctor_available
 
   def appointment_date_cannot_be_in_the_past
     if appointment_date.present? && appointment_date.past?
@@ -16,11 +17,11 @@ class Appointment < ApplicationRecord
 
   def check_if_doctor_available
     
-    doc_avail = DoctorAvailability.find_by(user_id:id_doctor)
-    doc_details = User.find_by(id: id_doctor)    
+    doc_avail = DoctorAvailability.find_by(doctor_id:doctor_id)
+    doc_details = User.find_by(id: doctor_id)    
 
     unless doc_avail
-      errors.add(:id_doctor, "The doctor doesnt exist or hasnt set his/her available times")
+      errors.add(:doctor_id, "The doctor doesnt exist or hasnt set his/her available times")
     else
       #check if he is available
       start_date = doc_avail[:start_day]

@@ -9,6 +9,8 @@ class User < ApplicationRecord
     }
 
     has_secure_password
-    has_many :appointments
-    has_one  :doctor_availability
+    has_many :doctor_appointment, class_name: "Appointment", foreign_key: "doctor_id"
+    has_many :patient_appointment, class_name: "Appointment", foreign_key: "patient_id"
+
+    has_one  :doctor_availability, class_name: "DoctorAvailability", foreign_key: "doctor_id"
 end
