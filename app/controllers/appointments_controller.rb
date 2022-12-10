@@ -5,7 +5,7 @@ class AppointmentsController < ApplicationController
     wrap_parameters format: []
 
     def index 
-        appointments = Appointment.all 
+        appointments = Appointment.all         
         render json: appointments, status: :ok
     end
     
@@ -22,6 +22,7 @@ class AppointmentsController < ApplicationController
 
     def update
         appointment = find_appointment
+        byebug
         appointment.update!(appointment_params_update)
         render json: appointment, status: :accepted 
     end
@@ -32,13 +33,14 @@ class AppointmentsController < ApplicationController
         head :no_content
     end
 
-    def appointment_doctors
-        #appointments = Appointment.where(id_doctor:params[:doctor_id])
-        #byebug
-        #render json: appointments, status: :ok
-        puts "controller for appointment doctors"
-        byebug
-       # puts params[:doctor_id]
+    def appointment_doctors  
+        appointments = Appointment.where(doctor_id: params[:id])   
+        render json: appointments, status: :ok # , each_serializers: UserSerializer       
+    end
+    
+    def appointment_patients
+        appointments = Appointment.where(patient_id: params[:id])   
+        render json: appointments, status: :ok #, each_serializers: UserSerializer  
     end
 
     private
@@ -46,12 +48,13 @@ class AppointmentsController < ApplicationController
         Appointment.find(params[:id])
     end
 
+
     def appointment_params_create
-        params.permit(:appointment_date, :user_id, :comments, :id_doctor, :status)
+        params.permit(:appointment_date, :patient_id, :comments, :doctor_id, :status)
     end
 
     def appointment_params_update
-        params.permit(:appointment_date, :comments, :status, :id_doctor)
+        params.permit(:id,:appointment_date, :comments, :status, :doctor_id,:patient_id)
     end
 
     def render_appointment_unprocessable_entity(error_object)
@@ -63,6 +66,6 @@ class AppointmentsController < ApplicationController
     end
 
     def authorize
-        return render json: {error: "User not authorised"}, status: :unauthorized unless session.include? :user_id
+        return render json: {error: "User not authorised"}, status: :unauthorized unless session.include? :patient_id
     end
 end

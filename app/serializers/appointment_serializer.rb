@@ -1,6 +1,7 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :appointment_date, :comments, :status
-  belongs_to :user
+  attributes :id, :patient, :appointment_date, :comments, :status, :doctor
+  belongs_to :doctor
+  belongs_to :patient
 
   # def doctor
   #   doctor = User.find_by(id:self.object.id_doctor)  

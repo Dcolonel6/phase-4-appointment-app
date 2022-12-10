@@ -39,8 +39,8 @@ const Navbar = () => {
         <Bars />
         <NavMenu>
           <NavLink to="/appointments">Appointments</NavLink>
+          {/* <NavLink to="/make-appointment">Book Appointment</NavLink> */}
           <NavLink to="/make-appointment">Book Appointment</NavLink>
-          <NavLink to="/doctors">Doctors</NavLink>
           <NavLink to="/signup">Sign Up</NavLink>
         </NavMenu>
         <NavBtn>
