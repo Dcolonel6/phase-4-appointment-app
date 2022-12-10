@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'
 import DayTimePicker from '@mooncake-dev/react-day-time-picker';
 import axios from "axios";
+
 
 import { userContext } from '../../App';
 import Doctor from './doctor'
@@ -12,8 +14,10 @@ const Appointments = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState({});
   const [hasSelected,setHasSelected] = useState(false);
+  const [isDone,setIsDone] = useState(false)
 
   const { user } = useContext(userContext);
+  const navigate = useNavigate()
   
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const Appointments = () => {
 		})
 			.then((res) => {
 				console.log(res.data);
-				//navigate("/appointments");
+				navigate("/appointments");
 			})
 			.catch((err) => {
 				console.log(err);
@@ -47,8 +51,7 @@ const Appointments = () => {
     if(numDocId){
       const doc = doctors.find(({id}) => id === numDocId)
       setHasSelected(true)
-      if(doc){
-        console.log(doc)
+      if(doc){        
         setSelectedDoc(doc)
       }else{
         setSelectedDoc({})
@@ -60,26 +63,19 @@ const Appointments = () => {
   }
 
 
-  const handleScheduled = (dateTime) => {
-    console.log('scheduled: ', dateTime);
+  const handleScheduled = (dateTime) => { 
     makeAppointment({
-      id_doctor: selectedDoc.id,
-      user_id: user.id,
+      doctor_id: selectedDoc.id,
+      patient_id: user.id,
       comments: "i have a headache",
       appointment_date: dateTime
     })
-    console.log("made appointment with the following data")
-    console.log({
-      id_doctor: selectedDoc.id,
-      user_id: user.id,
-      comments: "i have a headache",
-      appointment_date: dateTime
-    })
+    setIsDone(true)
   };
   return (
     <>
       < Doctor doctors={doctors} setSelectd={handleOnSelect} />
-      {hasSelected && <DayTimePicker timeSlotSizeMinutes={60}  onConfirm ={handleScheduled}  />}
+      {hasSelected && <DayTimePicker timeSlotSizeMinutes={60} err={false} onConfirm ={handleScheduled} isLoading={!isDone} isDone={isDone}/>}
     </>
    
   );
