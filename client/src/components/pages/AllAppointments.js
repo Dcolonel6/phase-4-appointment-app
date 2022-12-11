@@ -21,12 +21,12 @@ const AllAppointments = () => {
   // const navigate = useNavigate();
 
   //check if user is logged in
-  user = user || {
-    id: 19,
-    username: "Ian",
-    name: "Ian Muriithi",
-    role: "Patient",
-  };
+  // user = user || {
+  //   id: 19,
+  //   username: "Ian",
+  //   name: "Ian Muriithi",
+  //   role: "Patient",
+  // };
   useEffect(() => {
     fetchAppointments();
   }, []);
