@@ -6,6 +6,7 @@ import axios from "axios";
 
 import { userContext } from '../../App';
 import Doctor from './doctor'
+import AlertBox from '../alerts';
 
 //https://react-day-time-picker.netlify.app/ documentation
 
@@ -16,16 +17,20 @@ const Appointments = () => {
   const [hasSelected,setHasSelected] = useState(false);
   const [isLoading,setIsLoading] = useState(false)
   const [isDone,setIsDone] = useState(false)
+  const [error, setError] = useState("")
+  const [show, setShow] = useState(false);
 
   const { user } = useContext(userContext);
   const navigate = useNavigate()
-  
+ 
 
   useEffect(() => {
     fetch("/doctors")
       .then((resp) => resp.json())
       .then((data) => setDoctors(data));
   }, []);
+  const handleClose = () => setShow(false);
+  //const handleShow = () => setShow(true);
 
   const makeAppointment = async(payload) => {
     await axios({
@@ -44,7 +49,10 @@ const Appointments = () => {
 				// navigate("/appointments");
 			})
 			.catch((err) => {
+        setIsLoading(false)
+        setIsDone(true)
 				console.log(err);
+        setError(err)
 				//errors.push("Invalid username or password");
 			});
   }
@@ -77,13 +85,12 @@ const Appointments = () => {
     })
     
   };
-  return (
-    <>
-      < Doctor doctors={doctors} setSelectd={handleOnSelect} />
-      {hasSelected && <DayTimePicker timeSlotSizeMinutes={60} err={""} onConfirm ={handleScheduled} isLoading={isLoading} isDone={isDone}/>}
-    </>
+  const content = user.role === "Patient"?  (<>
+    < Doctor doctors={doctors} setSelectd={handleOnSelect} />
+    {hasSelected && <DayTimePicker timeSlotSizeMinutes={60} err={error} onConfirm ={handleScheduled} isLoading={isLoading} isDone={isDone}/>}
+  </>) : (<AlertBox variant={"danger"} message={"A doctor cant make appointments"} setShowHandler= {handleClose}/>) 
+  return content
    
-  );
 };
 
 export default Appointments;
