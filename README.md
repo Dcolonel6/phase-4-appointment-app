@@ -9,7 +9,9 @@ The doctor can change the status from pending to do after seeing a patient. The 
 and a signup page if one is a new user. Under doctor's availability, a patient can check which doctor is available before booking an appointment.
 
 #Technologies Used
+
 React Rails
 
 #Features
+
 Displaying users and appointments Adding users Adding appointments with patients
