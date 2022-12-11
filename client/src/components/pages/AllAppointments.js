@@ -12,8 +12,8 @@ const AllAppointments = () => {
   let { user } = useContext(userContext);
   const [appointments, setAppointments] = useState([]);
   const [show, setShow] = useState(false);
-  const [errorMessageAlert, setErrorMessageAlert] = useState(false)
-  const [successMessageAlert, setSuccessMessageAlert] = useState(false)
+  const [errorMessageAlert, setErrorMessageAlert] = useState(false);
+  const [successMessageAlert, setSuccessMessageAlert] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState();
 
   const handleClose = () => setShow(false);
@@ -57,6 +57,11 @@ const AllAppointments = () => {
       </tr>
     </thead>
   );
+  const statusBadges = {
+    Pending: "bg-warning",
+    Rejected: "bg-danger",
+    Approved: "bg-success",
+  };
 
   const tableHead = user.role === "Patient" ? thPatient : thDoc;
   const baseUrl =
@@ -85,13 +90,18 @@ const AllAppointments = () => {
 
   const tablerows = appointments.map(
     ({ id, status, comments, doctor, patient, appointment_date }, index) => {
+      
       if (user.role === "Patient")
         return (
           <tr key={id}>
             <th scope="row">{index + 1}</th>
             <td>{doctor.name}</td>
             <td>{appointment_date}</td>
-            <td>{status}</td>
+            <td>
+              <span className={`badge badge-pill ${statusBadges[status]}`}>
+                {status}
+              </span>
+            </td>
             <td>{comments}</td>
             <td>
               <h3 onClick={() => handleClick(id)}>
@@ -99,7 +109,9 @@ const AllAppointments = () => {
               </h3>
             </td>
             <td>
-              <h4 onClick={() => handleDelete(id, doctor.name, appointment_date)}>
+              <h4
+                onClick={() => handleDelete(id, doctor.name, appointment_date)}
+              >
                 <FaTrash />
               </h4>
             </td>
@@ -111,7 +123,12 @@ const AllAppointments = () => {
           <th scope="row">{index + 1}</th>
           <td>{patient.name}</td>
           <td>{appointment_date}</td>
-          <td>{status}</td>
+          <td>
+            {" "}
+            <span className={`badge  ${statusBadges[status]}`}>
+              {status}
+            </span>
+          </td>
           <td>{comments}</td>
           <td>
             <h3 onClick={() => handleClick(id)}>
@@ -129,7 +146,7 @@ const AllAppointments = () => {
     setSelectedAppointment(selected);
   };
 
-  const updateAppointments = (updatedAppoitment) => {    
+  const updateAppointments = (updatedAppoitment) => {
     setAppointments((currentAppointments) => {
       return currentAppointments.map((appointment) => {
         return appointment.id === updatedAppoitment.id
@@ -138,44 +155,43 @@ const AllAppointments = () => {
       });
     });
   };
-  console.log(appointments)
+  console.log(appointments);
 
-  const setAlertHandler = (bool,type) => {
-    if(type === "success"){
-      setSuccessMessageAlert(bool)
-      return
+  const setAlertHandler = (bool, type) => {
+    if (type === "success") {
+      setSuccessMessageAlert(bool);
+      return;
     }
-    setErrorMessageAlert(bool)
-
-  }
+    setErrorMessageAlert(bool);
+  };
 
   const updateDeleted = (deletedId) => {
     setAppointments((currentAppointments) => {
       return currentAppointments.filter((appointment) => {
-        return appointment.id !== deletedId         
+        return appointment.id !== deletedId;
       });
-    });   
-  }
+    });
+  };
 
   const handleDelete = (deletedId, name, date) => {
-    const response = window.confirm(`Are you sure you want to delete your appointment with Dr.${name} on ${date}?`);
-    if(response){   
-
-      axios.delete(`/appointments/${deletedId}`)
-      .then((res) => {      
-        updateDeleted(deletedId)  
-        setAlertHandler(true,"success")
-        //console.log(res.data)
-      })
-      .catch((err) => {
-        console.log(err);
-        setAlertHandler(true,"danger")
-        //errors.push("Invalid username or password");
-      });
-
+    const response = window.confirm(
+      `Are you sure you want to delete your appointment with Dr.${name} on ${date}?`
+    );
+    if (response) {
+      axios
+        .delete(`/appointments/${deletedId}`)
+        .then((res) => {
+          updateDeleted(deletedId);
+          setAlertHandler(true, "success");
+          //console.log(res.data)
+        })
+        .catch((err) => {
+          console.log(err);
+          setAlertHandler(true, "danger");
+          //errors.push("Invalid username or password");
+        });
     }
-    
-  }
+  };
 
   return (
     <>
@@ -183,10 +199,23 @@ const AllAppointments = () => {
         <div className="row justify-content-start">
           <div className="row justify-content-center">
             <div className="col-6">
-              {user.role ? `All Apointments for ${user.role} : ${user.name}` : "Please login"}   
-             { errorMessageAlert && <AlertBox variant="danger" message="Something went wrong, Update Failed" setShowHandler={setAlertHandler}/>}
-              { successMessageAlert && <AlertBox variant="success" message="Yaay! update succeeded!!" setShowHandler={setAlertHandler}/>}       
-              
+              {user.role
+                ? `All Apointments for ${user.role} : ${user.name}`
+                : "Please login"}
+              {errorMessageAlert && (
+                <AlertBox
+                  variant="danger"
+                  message="Something went wrong, Update Failed"
+                  setShowHandler={setAlertHandler}
+                />
+              )}
+              {successMessageAlert && (
+                <AlertBox
+                  variant="success"
+                  message="Yaay! update succeeded!!"
+                  setShowHandler={setAlertHandler}
+                />
+              )}
             </div>
             <div className="col-8">
               <table className="table">
@@ -203,7 +232,7 @@ const AllAppointments = () => {
         currentUser={user}
         selectedAppointment={selectedAppointment}
         update={updateAppointments}
-        setAlertHandler={setAlertHandler }
+        setAlertHandler={setAlertHandler}
       />
     </>
   );
