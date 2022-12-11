@@ -104,12 +104,12 @@ const AllAppointments = () => {
             </td>
             <td>{comments}</td>
             <td>
-              <h3 onClick={() => handleClick(id)}>
+              <h3 className="text-primary" gitonClick={() => handleClick(id)}>
                 <FaUserEdit />
               </h3>
             </td>
             <td>
-              <h4
+              <h4 className="text-danger"
                 onClick={() => handleDelete(id, doctor.name, appointment_date)}
               >
                 <FaTrash />
@@ -131,7 +131,7 @@ const AllAppointments = () => {
           </td>
           <td>{comments}</td>
           <td>
-            <h3 onClick={() => handleClick(id)}>
+            <h3 className="text-primary" onClick={() => handleClick(id)}>
               <FaUserEdit />
             </h3>
           </td>
