@@ -14,6 +14,7 @@ const Appointments = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState({});
   const [hasSelected,setHasSelected] = useState(false);
+  const [isLoading,setIsLoading] = useState(false)
   const [isDone,setIsDone] = useState(false)
 
   const { user } = useContext(userContext);
@@ -37,8 +38,10 @@ const Appointments = () => {
 			data: payload,
 		})
 			.then((res) => {
-				console.log(res.data);
-				navigate("/appointments");
+        setIsLoading(false)
+        setIsDone(true)
+				// console.log(res.data);
+				// navigate("/appointments");
 			})
 			.catch((err) => {
 				console.log(err);
@@ -46,7 +49,8 @@ const Appointments = () => {
 			});
   }
 
-  const handleOnSelect = (selectedDocId) => {    
+  const handleOnSelect = (selectedDocId) => {   
+     
     const numDocId = Number(selectedDocId)
     if(numDocId){
       const doc = doctors.find(({id}) => id === numDocId)
@@ -64,18 +68,19 @@ const Appointments = () => {
 
 
   const handleScheduled = (dateTime) => { 
+    setIsLoading(true)
     makeAppointment({
       doctor_id: selectedDoc.id,
       patient_id: user.id,
       comments: "i have a headache",
       appointment_date: dateTime
     })
-    setIsDone(true)
+    
   };
   return (
     <>
       < Doctor doctors={doctors} setSelectd={handleOnSelect} />
-      {hasSelected && <DayTimePicker timeSlotSizeMinutes={60} err={false} onConfirm ={handleScheduled} isLoading={!isDone} isDone={isDone}/>}
+      {hasSelected && <DayTimePicker timeSlotSizeMinutes={60} err={""} onConfirm ={handleScheduled} isLoading={isLoading} isDone={isDone}/>}
     </>
    
   );
