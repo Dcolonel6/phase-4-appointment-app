@@ -20,7 +20,7 @@ const Doctor = ({doctors, setSelectd}) => {
         alignItems: "center",
       }}
     >
-      <div>
+      <div className="form-group">
         <label htmlFor="pet-select">Choose a doctor:</label>
 
         <select name="doctors" id="doc-select" onChange ={onChangeHandler}>
@@ -28,6 +28,7 @@ const Doctor = ({doctors, setSelectd}) => {
           {allDocOption}
         </select>
       </div>
+     
     </div>
   );
 };

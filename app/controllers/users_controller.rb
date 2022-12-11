@@ -14,6 +14,11 @@ class UsersController < ApplicationController
         render json: new_user, status: :created
     end
 
+    def show
+        user = find_user
+        render json: user, status: :ok
+    end
+
     def update 
         user = find_user
         user.update!(user_params)
@@ -27,8 +32,7 @@ class UsersController < ApplicationController
     end
 
     private
-    def user_params
-        
+    def user_params        
         params.permit(:username, :name, :password, :role)
     end
 

@@ -549,7 +549,7 @@ function RegistrationPage(props) {
 			})
 			.catch((err) => {
 				console.log(err);
-				errors.push(...err?.response?.data?.errors);
+				errors.push(...err?.message);
 			});
 
 		setFormErrors(errors);
